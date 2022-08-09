@@ -1,5 +1,5 @@
-import 'dotenv/config'
-import mysql from 'mysql';
+require('dotenv').config()
+const mysql = require('mysql');
 
 const db_connect
  = mysql.createConnection({
@@ -17,5 +17,4 @@ db_connect
     console.log('Database is connected successfully...');
 });
 
-export default db_connect
-;
+module.exports = db_connect;

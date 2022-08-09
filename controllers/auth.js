@@ -1,40 +1,32 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const { validationResult } = require('express-validator');
-const db = require('../db/dbConnection');
+const db = require('../db/db');
 
-const register = (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(422).json({ errors: errors.array() });
-  }
-  const { name, email, password } = req.body;
-  const hashPassword = bcrypt.hashSync(password, 10);
-  const query = `INSERT INTO users (name, email, password) VALUES (name, ${db.escape(email)}, ${db.escape(hashPassword)})`;
-  db.query(query, (err, result) => {
-    if (err) {
-      return res.status(500).json({
-        message: 'Internal server error',
-        error: err.message,
-      });
-    }else{
-      if(result.length > 0){
-        res.status(200).json({
-          data: result.rows[0]
-        });
-        return result;
-      }
-
-      const token = jwt.sign({ id: result.row[0].id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-      return res.status(201).json({
-        message: 'User created successfully',
-        token,
-        user: result.row[0],
-      });
+const register = async (req, res, next) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
     }
-
+    const { name, email, password } = req.body;
+    const hashPassword = bcrypt.hashSync(password, 10);
+    const user = await db.createUser(name, email, hashPassword);
+    const jsToken = jwt.sign({ user: user }, process.env.JWT_SECRET, { expiresIn: '1d' });
+    res.cookie('token', jsToken, { httpOnly: true, secure: true, sameSite: 'strict', expires: new Date(Date.now() + 86400000) });
+    return res.status(201).json({
+      message: 'User created successfully',
+      token: jsToken,
     });
-}
+
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      message: err.message
+    });
+  }
+
+  }
 
 const login = (req, res, next) => {
   const errors = validationResult(req);
@@ -71,6 +63,7 @@ const login = (req, res, next) => {
       }
     }
   })
+  // next();
 }
 
 const getUser = (req, res, next) => {

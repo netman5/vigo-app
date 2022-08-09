@@ -3,6 +3,7 @@ const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 const authRouter = require('./routes/authRoutes');
 
 const app = express();
@@ -11,6 +12,14 @@ app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
+authRouter.use(cookieParser());
+
+// Welcome route
+app.get('/', (req, res) => {
+  res.json({
+    message: 'Welcome to the Vigo API',
+  })
+})
 
 // Authendication routes
 app.use('/api', authRouter);

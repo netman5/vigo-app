@@ -19,37 +19,121 @@ db_connect.connect((err) => {
 let db = {};
 db.createUser = (name, email, password) => {
   return new Promise((resolve, reject) => {
-    db_connect.query('INSERT INTO users (name, email, password) VALUES (?,  ?, ?)', [name, email, password], (error, result) => {
-      if (error) {
-        return reject(error);
+    db_connect.query(
+      "INSERT INTO users (name, email, password) VALUES (?,  ?, ?)",
+      [name, email, password],
+      (error, result) => {
+        if (error) {
+          return reject(error);
+        }
+        return resolve(result.insertId);
       }
-      return resolve(result.insertId);
-    });
+    );
   });
 };
 
 db.getUserByEmail = (email) => {
-    return new Promise((resolve, reject) => {
-      db_connect.query('SELECT * FROM users WHERE email = ?', [email], (error, result) => {
+  return new Promise((resolve, reject) => {
+    db_connect.query(
+      "SELECT * FROM users WHERE email = ?",
+      [email],
+      (error, result) => {
         if (error) {
           return reject(error);
         }
         return resolve(result[0]);
-      });
-    }
+      }
+    );
+  });
+};
+
+// get all users
+db.getUsers = () => {
+  return new Promise((resolve, reject) => {
+    db_connect.query(
+      "SELECT * FROM users", (error, result) => {
+        if (error) {
+          return reject(error);
+        }
+        return resolve(result);
+      }
+    );
+  }
   );
+}
+
+db.getUserById = (id) => {
+  return new Promise((resolve, reject) => {
+    db_connect.query(
+      "SELECT * FROM users WHERE id = ?",
+      [id],
+      (error, result) => {
+        if (error) {
+          return reject(error);
+        }
+        return resolve(result[0]);
+      }
+    );
+  });
 }
 
 db.getVerifiedUser = (id) => {
   return new Promise((resolve, reject) => {
-    db_connect.query('SELECT * FROM users WHERE id = ? ', [id], (error, result) => {
-      if (error) {
-        return reject(error);
+    db_connect.query(
+      "SELECT * FROM users WHERE id = ? ",
+      [id],
+      (error, result) => {
+        if (error) {
+          return reject(error);
+        }
+        return resolve(result[0]);
       }
-      return resolve(result[0]);
-    }
+    );
+  });
+};
+
+// follow a user
+db.followUser = (user_id, following_id) => {
+  return new Promise((resolve, reject) => {
+    db_connect.query(
+      "INSERT INTO followers (user_id, following_id) VALUES (?, ?)", [user_id, following_id], (error, result) => {
+        if (error) {
+          return reject(error);
+        }
+        return resolve(result.insertId);
+      }
+    );
+  }
   );
 }
+
+// get all followers of a user
+db.getFollowers = (user_id) => {
+  return new Promise((resolve, reject) => {
+    db_connect.query(
+      "SELECT * FROM followers WHERE user_id = ?", [user_id], (error, result) => {
+        if (error) {
+          return reject(error);
+        }
+        return resolve(result);
+      }
+    );
+  }
+  );
+}
+
+// unfollow a user
+db.unfollowUser = (user_id, following_id) => {
+  return new Promise((resolve, reject) => {
+    db_connect.query(
+      "DELETE FROM followers WHERE user_id = ? AND following_id = ?", [user_id, following_id], (error, result) => {
+        if (error) {
+          return reject(error);
+        }
+        return resolve(result.affectedRows);
+      }
+    );
+  }
   );
 }
 

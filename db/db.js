@@ -18,13 +18,39 @@ db_connect.connect((err) => {
 
 let db = {};
 db.createUser = (name, email, password) => {
-    db_connect.query('INSERT INTO User (name, email, password) VALUES (?,  ?, ?)', [name, email, password], (error, result) => {
+  return new Promise((resolve, reject) => {
+    db_connect.query('INSERT INTO users (name, email, password) VALUES (?,  ?, ?)', [name, email, password], (error, result) => {
       if (error) {
-        return error;
+        return reject(error);
       }
-      return result.insertId;
+      return resolve(result.insertId);
     });
+  });
 };
 
+db.getUserByEmail = (email) => {
+    return new Promise((resolve, reject) => {
+      db_connect.query('SELECT * FROM users WHERE email = ?', [email], (error, result) => {
+        if (error) {
+          return reject(error);
+        }
+        return resolve(result[0]);
+      });
+    }
+  );
+}
+
+db.getVerifiedUser = (id) => {
+  return new Promise((resolve, reject) => {
+    db_connect.query('SELECT * FROM users WHERE id = ? ', [id], (error, result) => {
+      if (error) {
+        return reject(error);
+      }
+      return resolve(result[0]);
+    }
+  );
+}
+  );
+}
 
 module.exports = db;

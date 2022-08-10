@@ -47,6 +47,36 @@ db.getUserByEmail = (email) => {
   });
 };
 
+// get all users
+db.getUsers = () => {
+  return new Promise((resolve, reject) => {
+    db_connect.query(
+      "SELECT * FROM users", (error, result) => {
+        if (error) {
+          return reject(error);
+        }
+        return resolve(result);
+      }
+    );
+  }
+  );
+}
+
+db.getUserById = (id) => {
+  return new Promise((resolve, reject) => {
+    db_connect.query(
+      "SELECT * FROM users WHERE id = ?",
+      [id],
+      (error, result) => {
+        if (error) {
+          return reject(error);
+        }
+        return resolve(result[0]);
+      }
+    );
+  });
+}
+
 db.getVerifiedUser = (id) => {
   return new Promise((resolve, reject) => {
     db_connect.query(

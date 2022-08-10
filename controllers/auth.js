@@ -103,7 +103,6 @@ const logout = async (req, res, next) => {
   }
 }
 
-// jwtTokenVerification user middleware
 const jwtTokenVerification = async (req, res, next) => {
   try {
     if (!req.headers.authorization || !req.headers.authorization.startsWith('Bearer') || !req.headers.authorization.split(' ')[1]) {

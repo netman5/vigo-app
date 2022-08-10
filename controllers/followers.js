@@ -35,11 +35,22 @@ exports.unfollowUser = async (req, res, next) => {
 // get all followers of a user
 exports.getFollowers = async (req, res, next) => {
   try {
-    const { user_id } = req.params;
+    const { user_id } = req.query;
+    const users = await db.getUsers()
     const followers = await db.getFollowers(user_id);
+    const result = followers.map(follower => {
+      return users.find(user => user.id === follower.following_id);
+    })
+    const filteredResult = result.filter(user => user !== undefined).map(user => {
+      return { id: user.id, name: user.name, email: user.email };
+    }).sort((a, b) => {
+      return a.id - b.id;
+    }).reverse();
+
     res.status(200).json({
       message: 'Followers retrieved successfully',
-      followers
+      result: filteredResult,
+      count: result.length,
     });
   } catch (error) {
     next(error);

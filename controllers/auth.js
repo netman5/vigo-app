@@ -90,8 +90,49 @@ const getUser = async (req, res, next) => {
   }
 }
 
+const logout = async (req, res, next) => {
+  try {
+    res.clearCookie('token');
+    return res.status(200).json({
+      message: 'User logged out successfully'
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message
+    });
+  }
+}
+
+// jwtTokenVerification user middleware
+const jwtTokenVerification = async (req, res, next) => {
+  try {
+    if (!req.headers.authorization || !req.headers.authorization.startsWith('Bearer') || !req.headers.authorization.split(' ')[1]) {
+      return res.status(401).json({
+        message: 'Unauthorized'
+      });
+    }
+    const token = req.headers.authorization.split(' ')[1];
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await db.getVerifiedUser(decoded.user.id);
+    if (!user) {
+      return res.status(400).json({
+        message: 'User does not exist or Invalid credentials'
+      });
+    }
+    req.user = user;
+    next();
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message
+    });
+  }
+}
+
+
 module.exports = {
   register,
   login,
-  getUser
+  getUser,
+  logout,
+  jwtTokenVerification
 }

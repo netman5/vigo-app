@@ -2,6 +2,12 @@ const db = require('../db/db');
 
 const createPost = async (req, res, next) => {
   try {
+
+    if(!req.file) {
+      return res.status(400).json({
+        message: 'No image provided'
+      });
+    }
     const { id } = req.user;
     const { content } = req.body;
     const post = await db.createPostWithImage(content, id, req.file.filename);

@@ -158,6 +158,7 @@ db.createPostWithImage = (user_id, content, image) => {
     db_connect.query(
       "INSERT INTO posts (user_id, content, image) VALUES (?, ?, ?)", [user_id, content, image], (error, result) => {
         if (error) {
+          console.log(error)
           return reject(error);
         }
         return resolve(result.insertId);

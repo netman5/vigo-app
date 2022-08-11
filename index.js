@@ -23,7 +23,7 @@ app.get('/', (req, res) => {
 })
 
 // Authendication routes
-app.use('/api', authRouter);
+app.use('/api/auth', authRouter);
 app.use('/api', followRoute);
 app.use('/api/posts', postsRoutes);
 

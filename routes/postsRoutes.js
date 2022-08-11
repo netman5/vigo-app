@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { jwtTokenVerification } = require('../controllers/auth');
+const { jwtTokenVerification } = require('../controllers/auth/auth');
 const { createPost, getPosts, getPostsByUserId, getPostById } = require('../controllers/posts');
 const upload = require('../utils/multer');
 

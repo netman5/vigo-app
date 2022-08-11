@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { followUser, getFollowers, unfollowUser } = require('../controllers/followers');
-const { jwtTokenVerification } = require('../controllers/auth');
+const { jwtTokenVerification } = require('../controllers/auth/auth');
 
 router.get('/followers', jwtTokenVerification, getFollowers);
 router.post('/follow', jwtTokenVerification, followUser);

@@ -10,7 +10,7 @@ const createPost = async (req, res, next) => {
     }
     const { id } = req.user;
     const { content } = req.body;
-    const post = await db.createPostWithImage(content, id, req.file.filename);
+    const post = await db.createPostWithImage(id, content, req.file.filename);
     return res.status(200).json({
       message: 'Image uploaded successfully',
       post
@@ -39,7 +39,7 @@ const getPosts = async (req, res, next) => {
 
 const getPostsByUserId = async (req, res, next) => {
   try {
-    const { id } = req.params;
+    const { id } = req.user;
     const posts = await db.getPostsByUserId(id);
     return res.status(200).json({
       message: 'Posts retrieved successfully',

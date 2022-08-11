@@ -156,7 +156,7 @@ db.getPostsByUserId = (id) => {
 db.createPostWithImage = (user_id, content, image) => {
   return new Promise((resolve, reject) => {
     db_connect.query(
-      "INSERT INTO posts (user_id, content, image) VALUES (?, ?, ?)", [user_id, content, image], (error, result) => {
+      "INSERT INTO posts (user_id, text, image_url) VALUES (?, ?, ?)", [user_id, content, image], (error, result) => {
         if (error) {
           console.log(error)
           return reject(error);

@@ -62,6 +62,7 @@ db.getUsers = () => {
   );
 }
 
+// get a single user by id
 db.getUserById = (id) => {
   return new Promise((resolve, reject) => {
     db_connect.query(
@@ -132,6 +133,64 @@ db.unfollowUser = (user_id, following_id) => {
         }
         return resolve(result.affectedRows);
       }
+    );
+  }
+  );
+}
+
+// get all posts of a user
+db.getPostsByUserId = (id) => {
+  return new Promise((resolve, reject) => {
+    db_connect.query(
+      "SELECT * FROM posts WHERE user_id = ?", [id], (error, result) => {
+        if (error) {
+          return reject(error);
+        }
+        return resolve(result);
+      }
+    );
+  }
+  );
+}
+
+db.createPostWithImage = (user_id, content, image) => {
+  return new Promise((resolve, reject) => {
+    db_connect.query(
+      "INSERT INTO posts (user_id, text, image_url) VALUES (?, ?, ?)", [user_id, content, image], (error, result) => {
+        if (error) {
+          console.log(error)
+          return reject(error);
+        }
+        return resolve(result.insertId);
+      }
+    );
+  }
+  );
+}
+
+db.getPosts = () => {
+  return new Promise((resolve, reject) => {
+    db_connect.query(
+      "SELECT * FROM posts", (error, result) => {
+        if (error) {
+          return reject(error);
+        }
+        return resolve(result);
+      }
+    );
+  }
+  );
+}
+
+// get a post by id
+db.getPostById = (id) => {
+  return new Promise((resolve, reject) => {
+    db_connect.query( "SELECT * FROM posts WHERE id = ?", [id], (error, result) => {
+      if (error) {
+        return reject(error);
+      }
+      return resolve(result[0]);
+    }
     );
   }
   );

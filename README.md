@@ -2,9 +2,9 @@
 
 ## Description
 
-Vigoapp is a full stack social media app for creating posts, connecting with friends and family. The backend is built with Nodejs, Express, MySQL and the backend can be found [here.](https://github.com/netman5/vigo-app.git)
+Vigoapp is a full stack social media app for creating posts, connecting with friends and family. The backend is built with Nodejs, Express, MySQL and the frontend can be found [here.](https://github.com/netman5/vigoapp-FE.git)
 
-It is built as a requirement for the Microverse Final Capstone.
+It is built as a requirement for the take home challenge from VigoPlace.
 
 ## Demo
 

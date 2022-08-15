@@ -128,11 +128,26 @@ const jwtTokenVerification = async (req, res, next) => {
   }
 }
 
+// get all users
+const getUsers = async (req, res, next) => {
+  try {
+    const users = await db.getAllUsers();
+    return res.status(200).json({
+      users
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message
+    });
+  }
+}
+
 
 module.exports = {
   register,
   login,
   getUser,
   logout,
+  getUsers,
   jwtTokenVerification
 }

@@ -48,7 +48,7 @@ db.getUserByEmail = (email) => {
 };
 
 // get all users
-db.getUsers = () => {
+db.getAllUsers = () => {
   return new Promise((resolve, reject) => {
     db_connect.query(
       "SELECT * FROM users", (error, result) => {

@@ -12,12 +12,12 @@ const createPost = async (req, res, next) => {
     const { content } = req.body;
     const post = await db.createPostWithImage(id, content, req.file.filename);
     return res.status(200).json({
-      message: 'Image uploaded successfully',
+      message: 'Post uploaded successfully',
       post
     });
   } catch (error) {
     return res.status(500).json({
-      message: error.message
+      message: error
     });
   }
 }

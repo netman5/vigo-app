@@ -5,7 +5,7 @@ const { createPost, getPosts, getPostsByUserId, getPostById } = require('../cont
 const upload = require('../utils/multer');
 
 router.get('/', jwtTokenVerification, getPosts);
-router.post('/', upload.single('image'), jwtTokenVerification, createPost);
+router.post('/', upload.single('image'), express.static('uploads'), jwtTokenVerification, createPost);
 router.get('/user', jwtTokenVerification, getPostsByUserId);
 router.get('/user/:id', jwtTokenVerification, getPostById);
 

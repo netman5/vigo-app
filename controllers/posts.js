@@ -10,7 +10,7 @@ const createPost = async (req, res, next) => {
     }
     const { id } = req.user;
     const { content } = req.body;
-    const post = await db.createPostWithImage(id, content, req.file.filename);
+    const post = await db.createPostWithImage(id, content, req.file.path);
     return res.status(200).json({
       message: 'Post uploaded successfully',
       post

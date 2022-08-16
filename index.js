@@ -12,7 +12,11 @@ const port = process.env.PORT || 3000;
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cors());
+app.use(cors({
+  origin: true,
+  methods: ['GET', 'POST'],
+  credentials: true,
+}));
 authRouter.use(cookieParser());
 
 // Welcome route

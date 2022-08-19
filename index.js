@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser');
 const authRouter = require('./routes/authRoutes');
 const followRoute = require('./routes/followersRoutes');
 const postsRoutes = require('./routes/postsRoutes');
+const upload = require('./utils/multer');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -19,6 +20,7 @@ app.use(cors({
 }));
 authRouter.use(cookieParser());
 
+
 // Welcome route
 app.get('/', (req, res) => {
   res.json({
@@ -26,10 +28,11 @@ app.get('/', (req, res) => {
   })
 })
 
+
 // Authendication routes
 app.use('/api/auth', authRouter);
 app.use('/api', followRoute);
-app.use('/api/posts', postsRoutes);
+app.use('/api', postsRoutes);
 
 // error handler
 app.use((err, req, res, next) => {
@@ -49,10 +52,5 @@ const start = () => {
     process.exit();
   }
 }
-
-
-// app.listen(port, () => {
-//   console.log(`Server is running on port ${port}`);
-// });
 
 start();

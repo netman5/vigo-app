@@ -2,19 +2,31 @@ const db = require('../db/db');
 
 const createPost = async (req, res, next) => {
   try {
-
-    if(!req.file) {
-      return res.status(400).json({
-        message: 'No image provided'
-      });
-    }
     const { id } = req.user;
     const { content } = req.body;
+
+    if(!req.file) {
+      const post = await db.createPostWithImage(id, content, '');
+      return res.status(200).json({
+        message: 'Post uploaded successfully',
+        post
+      });
+    }
+
+    if(!content) {
+      const post = await db.createPostWithImage(id, '', req.file.path);
+      return res.status(200).json({
+        message: 'Post uploaded successfully',
+        post
+      });
+    }
+
     const post = await db.createPostWithImage(id, content, req.file.path);
     return res.status(200).json({
       message: 'Post uploaded successfully',
       post
     });
+
   } catch (error) {
     return res.status(500).json({
       message: error

@@ -2,11 +2,11 @@ const db = require('../db/db');
 
 const createPost = async (req, res, next) => {
   try {
-    const { id } = req.user;
+    const { id, name } = req.user;
     const { content } = req.body;
 
     if(!req.file) {
-      const post = await db.createPostWithImage(id, content, '');
+      const post = await db.createPostWithImage(id, name, content, '');
       return res.status(200).json({
         message: 'Post uploaded successfully',
         post
@@ -14,14 +14,14 @@ const createPost = async (req, res, next) => {
     }
 
     if(!content) {
-      const post = await db.createPostWithImage(id, '', req.file.path);
+      const post = await db.createPostWithImage(id, name, '', req.file.path);
       return res.status(200).json({
         message: 'Post uploaded successfully',
         post
       });
     }
 
-    const post = await db.createPostWithImage(id, content, req.file.path);
+    const post = await db.createPostWithImage(id, name, content, req.file.path);
     return res.status(200).json({
       message: 'Post uploaded successfully',
       post

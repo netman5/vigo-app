@@ -9,8 +9,9 @@ exports.followUser = async (req, res, next) => {
     return res.status(422).json({ errors: errors.array() });
   }
   try {
-    const { user_id, following_id } = req.body;
-    const result = await followUser(user_id, following_id);
+    const { id } = req.user;
+    const { following_id } = req.body;
+    const result = await followUser(id, following_id);
     res.status(200).json({ message: 'You are now following this user', result });
   } catch (error) {
     next(error);
@@ -44,9 +45,9 @@ exports.unfollowUser = async (req, res, next) => {
 // get all followers of a user
 exports.getFollowers = async (req, res, next) => {
   try {
-    const { user_id } = req.query;
-    const users = await db.getUsers()
-    const followers = await db.getFollowers(user_id);
+    const { id } = req.params;
+    const users = await db.getAllUsers()
+    const followers = await db.getFollowers(id);
     const result = followers.map(follower => {
       return users.find(user => user.id === follower.following_id);
     })

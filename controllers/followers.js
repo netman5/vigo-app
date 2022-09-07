@@ -37,7 +37,7 @@ exports.unfollowUser = async (req, res, next) => {
     }).sort((a, b) => {
       return a.id - b.id;
     }).reverse();
-    res.status(200).json({ message: 'You are no longer following this user', result, filteredResult });
+    res.status(200).json({ message: 'You are no longer following this user', filteredResult });
   } catch (error) {
     next(error);
   }
